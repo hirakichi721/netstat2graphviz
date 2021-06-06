@@ -16,6 +16,8 @@
 
 # Output
   Digraph.gv.png
+  ![outputSample](https://user-images.githubusercontent.com/9582252/120920419-a4dc7600-c6f9-11eb-81a4-6b8f3a938738.png)
+
 
 # Pre-requirement
   1. pip install graphviz
