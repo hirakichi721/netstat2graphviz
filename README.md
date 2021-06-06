@@ -14,7 +14,7 @@
    udp,10.0.0.1:10001,10.0.0.3:514
   ```
 
-# Output
+# Output(sample)
 ![outputSample](https://user-images.githubusercontent.com/9582252/120920419-a4dc7600-c6f9-11eb-81a4-6b8f3a938738.png)
 
 
