@@ -30,6 +30,7 @@
 import sys
 import json
 from graphviz import Digraph
+import os
 
 if len(sys.argv)!=2:
   print("Usage: inputFile")
@@ -40,6 +41,8 @@ fp=sys.argv[1]
 nodes=[]
 edges=[]
 edge_labels=[]
+errorFile = fp+".err"
+errorData = []
 
 with open(fp,"r") as f:
   for line in f.readlines():
@@ -60,12 +63,26 @@ with open(fp,"r") as f:
     # If not numeric, link is not created.
     if not isExclude and ( sp=="HIGH" or sp.isnumeric() ) and ( dp=="HIGH" or dp.isnumeric()):
       # sp is normally destination port.
-      if dp=="HIGH" or int(sp)<int(dp):
+      print(line)
+      if dp=="HIGH" and sp=="HIGH":
+        # Very suspicious input data. Check for more detailed.
+        errorData.append(line)
+      elif dp=="HIGH" or ( sp!="HIGH" and int(sp)<int(dp)):
         edges.append([di,si])
         edge_labels.append(proto+"/"+sp)
-      else:
+      elif sp=="HIGH" or ( dp!="HIGH" and int(sp)>=int(dp)):
         edges.append([si,di])
         edge_labels.append(proto+"/"+dp)
+      else:
+        print("ERROR: Unpredicted error, stopped")
+        sys.exit(1)
+
+if len(errorData)!=0:
+  print("Warning: Error data found. Check the data for more detailed.")
+  print("  For more detailed => " + errorFile)
+  with open(errorFile,"w") as fw:
+    for dat in errorData:
+      fw.write(dat+"\n")
 
 nodes = sorted(list(set(nodes)))
 
