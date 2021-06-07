@@ -58,9 +58,9 @@ with open(fp,"r") as f:
       isExclude=False
 
     # If not numeric, link is not created.
-    if not isExclude and sp.isnumeric() and dp.isnumeric():
+    if not isExclude and ( sp=="HIGH" or sp.isnumeric() ) and ( dp=="HIGH" or dp.isnumeric()):
       # sp is normally destination port.
-      if int(sp)<int(dp):
+      if dp=="HIGH" or int(sp)<int(dp):
         edges.append([di,si])
         edge_labels.append(proto+"/"+sp)
       else:
@@ -74,7 +74,12 @@ dg = Digraph(format='png')
 for node in nodes:
   dg.node(node)
 # Add edges
+alreadyAdded=[]
 for i in range(0,len(edges)):
+  checkstr = "+".join([edges[i][0],edges[i][1],edge_labels[i]])
+  if checkstr in alreadyAdded:
+    continue
+  alreadyAdded.append(checkstr)
   dg.edge(edges[i][0],edges[i][1],edge_labels[i])
 dg.view()
 
